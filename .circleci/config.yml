@@ -2,58 +2,70 @@
 # See: https://circleci.com/docs/2.0/configuration-reference
 version: 2.1
 
+# Define a command that can be resused
+command:
+  print_pipeline_id:
+    steps:
+      - run: echo ${CIRCLE_WORKFLOW_ID}
+
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  print_world:
-    docker:
-      - image: circleci/node:13.8.0
-    steps: 
-      - run:
-          name: "Say world"
-          command: "echo World!"
+  # print_world:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps: 
+  #     - run:
+  #         name: "Say world"
+  #         command: "echo World!"
 
-  print_name:
+  # print_name:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: "My Name"
+  #         command: |
+  #           echo $MY_ENV_VAR 
+
+  # save_hello_world_output:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps: 
+  #     - run:
+  #         name: "printing text"  
+  #         command: |
+  #           echo "hello world" > ~/output.txt
+  #     - persist_to_workspace:
+  #         root: ~/
+  #         paths:
+  #           - output.txt      
+
+  # print_output_file:
+  #   docker:
+  #     - image: circleci/node:13.8.0
+  #   steps:
+  #     - attach_workspace:
+  #         at: ~/ 
+  #     - run:
+  #         name: "Out put Printing Text"
+  #         command: cat ~/output.txt
+
+  my_job:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - checkout
-      - run:
-          name: "My Name"
-          command: |
-            echo $MY_ENV_VAR 
-
-  save_hello_world_output:
-    docker:
-      - image: circleci/node:13.8.0
-    steps: 
-      - run:
-          name: "printing text"  
-          command: |
-            echo "hello world" > ~/output.txt
-      - persist_to_workspace:
-          root: ~/
-          paths:
-            - output.txt      
-
-
-  print_output_file:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - attach_workspace:
-          at: ~/ 
-      - run:
-          name: "Out put Printing Text"
-          command: cat ~/output.txt                 
+      - print_pipeline_id                          
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
 workflows:
   say-hello-workflow:
     jobs:
-      - save_hello_world_output
-      - print_name
-      - print_output_file:
-          requires:
-            - save_hello_world_output   
+      - my_job
+      # - save_hello_world_output
+      # - print_name
+      # - print_output_file:
+      #     requires:
+      #       - save_hello_world_output   
