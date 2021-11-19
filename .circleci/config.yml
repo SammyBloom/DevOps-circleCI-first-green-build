@@ -25,7 +25,17 @@ jobs:
     steps: 
       - run:
           name: "Say world"
-          command: "echo World!"     
+          command: "echo World!"
+
+  print_name:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - checkout
+      - run:
+          name: "My Name"
+          command: |
+            echo $MY_ENV_VAR         
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
@@ -35,3 +45,4 @@ workflows:
       - say-hello
       - print_world:
           requires: [say-hello]
+      - print_name   
