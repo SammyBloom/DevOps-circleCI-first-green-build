@@ -22,7 +22,12 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      - print_pipeline_id        
+      - run: return 1
+      - run:
+          name: on error
+          command: echo "Error in code"
+          when: on_fail
+      # - print_pipeline_id        
 
   # print_name:
   #   docker:
