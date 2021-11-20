@@ -6,18 +6,23 @@ version: 2.1
 command:
   print_pipeline_id:
     steps:
-      - run: echo $CIRCLE_WORKFLOW_ID
+      - run: echo ${CIRCLE_WORKFLOW_ID}
 
 # Define a job to be invoked later in a workflow.
 # See: https://circleci.com/docs/2.0/configuration-reference/#jobs
 jobs:
-  # print_world:
-  #   docker:
-  #     - image: circleci/node:13.8.0
-  #   steps: 
-  #     - run:
-  #         name: "Say world"
-  #         command: "echo World!"
+  print_world:
+    docker:
+      - image: circleci/node:13.8.0
+    steps: 
+      - run:
+          name: "Say world"
+          command: "echo World!"
+  my_job:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      - print_pipeline_id        
 
   # print_name:
   #   docker:
@@ -52,11 +57,6 @@ jobs:
   #         name: "Out put Printing Text"
   #         command: cat ~/output.txt
 
-  my_job:
-    docker:
-      - image: circleci/node:13.8.0
-    steps:
-      - print_pipeline_id                          
 
 # Invoke jobs via workflows
 # See: https://circleci.com/docs/2.0/configuration-reference/#workflows
